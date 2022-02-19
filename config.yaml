@@ -1,0 +1,22 @@
+name: "Resol VBus"
+description: "Addon to provide json VBus data and emulate Extension Modules for Resol Deltasol controllers."
+version: "0.0.1"
+slug: "resol_vbus"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+homeassistant_api: true
+config:
+  host: ""
+  password: "vbus"
+  sensors:
+    - binary_sensor.test
+    - sensor.temperatur
+schema:
+  host: str
+  password: str
+  sensors:
+    - str
