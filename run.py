@@ -20,18 +20,12 @@ class VBusCom:
         dataSource.setLivePassword("vbus")
         connection = dataSource.connectLive(0, 0x0020)
 
-        self.device1 = EmDeviceEmulator(connection, 1)
-        self.device1.setResistorValueByNrAndPt1000Temperatur(1, -40)
-        self.device1.setResistorValueByNrAndPt1000Temperatur(2, 0)
-        self.device1.setResistorValueByNrAndPt1000Temperatur(3, 40)
-        self.device1.setResistorValueByNrAndPt1000Temperatur(4, 80)
-        self.device1.setResistorValueByNrAndPt1000Temperatur(5, 120)
-        self.device1.setResistorValueByNrAndPt1000Temperatur(6, 160)
+        self.device = EmDeviceEmulator(connection, 1)
 
         # Start the device. This will start listening for EM request packets
         # and answering them with a reply packet containing the fake
         # sensor values set above.
-        self.device1.start()
+        self.device.start()
 
         # Establish the connection and start the listening background thread.
         connection.connect()
@@ -43,7 +37,7 @@ class VBusCom:
             delta = int(now - self._last_time)
             self._last_time = now
 
-            update_period = float(self.device1.update(delta))
+            update_period = float(self.device.update(delta))
             if update_period < 1:
                 update_period = 300.0
 
