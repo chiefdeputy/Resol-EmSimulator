@@ -1,13 +1,15 @@
 from time import sleep
 import jnius_config
-jnius_config.set_classpath('./vbus-0.7.0.jar')
+jnius_config.set_classpath('/root/vbus-0.7.0.jar')
 from jnius import autoclass
 import asyncio
 import time
 import json
+import os
 
 class VBusCom:
     def __init__(self):
+        self.config = self.__parse_config()
 
         # Create classes
         Addr = autoclass("java.net.InetAddress")
@@ -42,8 +44,14 @@ class VBusCom:
                 update_period = 300.0
 
             await asyncio.sleep(update_period / 1000)
+
     def __parse_config(self):
-        self.config = json.load("/data/options.json")
+        config = {}
+        with open("/data/options.json") as f:
+            config = json.load(f)
+        print(os.environ["SUPERVISOR_TOKEN"])
+        print(config)
+        return config
 
 
 

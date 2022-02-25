@@ -9,12 +9,10 @@ arch:
   - armv7
   - i386
 homeassistant_api: true
-config:
+options:
   host: ""
   password: "vbus"
-  sensors:
-    - binary_sensor.test
-    - sensor.temperatur
+  sensors: []
 schema:
   host: str
   password: str
