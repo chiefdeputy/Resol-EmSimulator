@@ -18,8 +18,8 @@ class VBusCom:
         TcpDataSourceProvider = autoclass('de.resol.vbus.TcpDataSourceProvider')
         EmDeviceEmulator = autoclass('de.resol.vbus.deviceemulators.EmDeviceEmulator')
 
-        dataSource = TcpDataSourceProvider.fetchInformation(Addr.getByName("192.168.110.167"), 1500)
-        dataSource.setLivePassword("vbus")
+        dataSource = TcpDataSourceProvider.fetchInformation(Addr.getByName(self.config["host"]), 1500)
+        dataSource.setLivePassword(self.config['password'])
         connection = dataSource.connectLive(0, 0x0020)
 
         self.device = EmDeviceEmulator(connection, 1)
