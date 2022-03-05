@@ -27,8 +27,11 @@ RUN \
     adoptopenjdk-8-hotspot \
     python3 \
     python3-pip \
+    python3-dev \
+    cython3 \
+    gcc \
   && wget -q -P /root/ https://github.com/danielwippermann/resol-vbus-java/releases/download/v0.7.0/vbus-0.7.0.jar \
-  && pip install pyjnius \
+  && pip install pyjnius asyncws \
   && apt-get remove --purge -y \
     wget \
     apt-transport-https \
