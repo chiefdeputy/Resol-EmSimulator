@@ -189,6 +189,6 @@ if config["json_server"]:
 finished, unfinished = loop.run_until_complete(
     asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED))
 
-loop.close()
 print(f"Task exited unexpected:{finished}")
-print(unfinished)
+loop.run_until_complete(asyncio.sleep(30))
+loop.close()
