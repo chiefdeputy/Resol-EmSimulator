@@ -36,7 +36,17 @@ RUN \
     wget \
     apt-transport-https \
     gnupg software-properties-common \
+    python3-dev \
+    gcc \
+    cython3 \
   && apt-get autoremove --purge -y
+
+ENV PYTHONUNBUFFERED=1
+ENV S6_LOGGING=0
+ENV JAVA_CLASSES=/root/vbus.jar
+ENV CONFIG=/data/options.json
+ENV BUILD_VERSION=${BUILD_VERSION}
 
 # add local files
 COPY rootfs/ /
+ 

@@ -1,0 +1,6 @@
+{
+    "host": "192.168.110.167",
+    "password": "vbus",
+    "sensors": ["switch.vorlaufpumpe_whirlpool", "sensor.temperature_sensor_2", "sensor.temperature_sensor_3", "sensor.temperature_sensor_9", "sensor.temperature_sensor_4"],
+    "json_server": true
+}

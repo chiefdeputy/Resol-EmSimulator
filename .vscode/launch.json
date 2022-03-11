@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: run.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/rootfs/root/run.py",
+            "cwd": "${workspaceFolder}/rootfs/root",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "JAVA_CLASSES": "${workspaceFolder}\\rootfs\\root\\vbus.jar",
+                "CONFIG": "options.json",
+                "SUPERVISOR_TOKEN": "token",
+                "Path": "${env:Path};${env:JAVA_HOME}\\bin\\server",
+                "BUILD_VERSION": "0.0.1"
+            }
+        }
+    ]
+}
