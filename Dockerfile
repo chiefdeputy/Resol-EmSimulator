@@ -30,7 +30,7 @@ RUN \
     python3-dev \
     cython3 \
     gcc \
-  && wget -q -O /root/vbus.jar https://github.com/danielwippermann/resol-vbus-java/releases/download/v0.7.0/vbus-0.7.0.jar \
+  && wget -q -O /root/vbus.jar https://github.com/danielwippermann/resol-vbus-java/releases/download/v0.9.0/vbus-0.9.0.jar \
   && pip install pyjnius asyncws \
   && apt-get remove --purge -y \
     wget \
