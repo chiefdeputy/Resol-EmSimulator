@@ -166,7 +166,7 @@ class JsonServer:
     async def run(self):
         print("JSON Server: Setup TCP web server.")
         await self._runner.setup()
-        site = web.TCPSite(self._runner, 'localhost', 26514)
+        site = web.TCPSite(self._runner, port=26514)
         await site.start()
         while True:
             await asyncio.sleep(3600)  
