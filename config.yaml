@@ -2,6 +2,8 @@ name: "Resol VBus"
 description: "Addon to provide json VBus data and emulate Extension Modules for Resol Deltasol controllers."
 version: "0.0.1"
 slug: "resol_vbus"
+ports:
+  26514/tcp: 26514
 arch:
   - aarch64
   - amd64
@@ -13,7 +15,7 @@ options:
   host: ""
   password: "vbus"
   sensors: []
-  json_server: 0
+  json_server: 26514
 schema:
   host: str
   password: str

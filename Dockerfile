@@ -31,7 +31,7 @@ RUN \
     cython3 \
     gcc \
   && wget -q -O /root/vbus.jar https://github.com/danielwippermann/resol-vbus-java/releases/download/v0.9.0/vbus-0.9.0.jar \
-  && pip install pyjnius asyncws \
+  && pip install pyjnius aiohttp websockets \
   && apt-get remove --purge -y \
     wget \
     apt-transport-https \
