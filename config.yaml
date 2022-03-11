@@ -13,8 +13,10 @@ options:
   host: ""
   password: "vbus"
   sensors: []
+  json_server: false
 schema:
   host: str
   password: str
   sensors:
     - str
+  json_server: bool
