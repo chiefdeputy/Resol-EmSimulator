@@ -2,7 +2,7 @@
 Home Assistant Addon project to simulate an EM device for Resol V-Bus. This is a proof of concept and probably not working very well.
 
 ## Installation
-This is WIP. So there's no convenient way to istall it yet. Get the terminal addon and checkout this repo to your ´´/addon´´ folder in home assistant. Add local addons in supervisor settings and build the container by installing it.
+This is WIP. So there's no convenient way to install it yet. Get the terminal addon and clone this repo to your ´´/addon´´ folder in home assistant. Add local addons in supervisor settings and build the container by installing it.
 
 **On Arm devices this can take up to 15 minutes!**
 
@@ -17,7 +17,7 @@ Configuration values:
     - input_boolean_to publish_as_sensor_3
     - input_number.to publish_as_sensor_4
     - sensor.to_publish_as_sensor_5
-  json_server: falses
+  json_server: true
 ```
 | Config        | Value    | Description |
 |---------------|----------|-------------|
@@ -28,6 +28,8 @@ Configuration values:
 
 ## json webserver
 In the future it is planned to use the custom component [hass-Deltasol-KM2](https://github.com/dm82m/hass-Deltasol-KM2) of @dm82m to provide entity_ids to home assistant using the json_server component of this addon.
+
+The server can be identified as a custom addon server by the endpoint ``/cgi-bin/get_resol_device_information``. All data of the VBus are available at ``/data`` as JSON formatted text. The information is refreshed every 10 seconds.
 
 ## Credits
 * VBus java library and em-simulation example by @danielwippermann: [resol-vbus-java](https://github.com/danielwippermann/resol-vbus-java)
