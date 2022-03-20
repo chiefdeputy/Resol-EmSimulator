@@ -16,15 +16,17 @@ ARG BUILD_ARCH=amd64
 
 RUN \
   apt-get update \
+  # && apt-get install -y --no-install-recommends \
+  #   wget \
+  #   apt-transport-https \
+  #   gnupg software-properties-common \
+  # && wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add - \
+  # && add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ \
+  # && apt-get update \
   && apt-get install -y --no-install-recommends \
+    # adoptopenjdk-8-hotspot \
+    openjdk-11-jdk-headless \
     wget \
-    apt-transport-https \
-    gnupg software-properties-common \
-  && wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add - \
-  && add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends \
-    adoptopenjdk-8-hotspot \
     python3 \
     python3-pip \
     python3-dev \
