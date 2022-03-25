@@ -2,13 +2,14 @@ import asyncio
 import json
 import websockets
 import os
-
+import logging
 
 ws_url = "ws://supervisor/core/websocket"
 
 class HassWs:
+    logger = logging.getLogger("Websock")
     def __init__(self, sensors, update_callback: callable, token: str):
-        print("Websocket: Setup listener")
+        self.logger.info("Setup listener")
         self._url = ws_url
         self._updater = update_callback
         self._token = token
@@ -26,7 +27,7 @@ class HassWs:
                 {}
             )]
 
-        print("Websocket: Connecting...")
+        self.logger.info("Connecting...")
         async with websockets.connect(self._url) as websocket:
             for state in connection_states:
                 message = await asyncio.wait_for(websocket.recv(), 1)
@@ -36,20 +37,17 @@ class HassWs:
                     if message["type"] == "result" and message["id"] == 1:
                         self._updater(None, message["result"])
                     elif message["type"] == "result" and message["id"] == 2:
-                        print("Websocket: Connection established, listening to state events...")
+                        self.logger.info("Connection established, listening to state events...")
                         break
                     await websocket.send(json.dumps(state[1]))
                 else:
-                    print("Websocket: Error. Expected message:")
-                    print(state[0])
-                    print("But got:")
-                    print(message)
+                    self.logger.error(f"Expected message:\n{state[0]}\nBut got:{message}")
                     raise ValueError("Unexpected response from Supervisor while connecting.")
 
             while True:
                 message = await websocket.recv()
                 if message is None:
-                    print("Websocket: Terminated.")
+                    self.logger.error("Terminated.")
                     raise TimeoutError("Websocket: Terminated.")
                 try:   
                     data = json.loads(message)['event']['variables']["trigger"]["to_state"]

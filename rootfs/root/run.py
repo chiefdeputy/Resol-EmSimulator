@@ -3,12 +3,14 @@ from hass import *
 import asyncio
 import json
 import os
+import logging
 
 config = {}
 with open(os.environ["CONFIG"]) as f:
     config = json.load(f)
 
-print(f'Configuration:\n{json.dumps(config, indent=4)}\n\n')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s', datefmt='%m-%d %d:%M')
+logging.debug(f'Configuration:\n{json.dumps(config, indent=4)}\n\n')
 
 connection = Connection(config["host"], config['password'])
 device_emulator = DeviceEmulator(connection, config["sensors"], 1)
@@ -29,6 +31,6 @@ connection.start()
 finished, unfinished = loop.run_until_complete(
     asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION))
 
-print(f"Task exited unexpected:{finished}")
+logging.error(f"Task exited unexpected:{finished}")
 loop.run_until_complete(asyncio.sleep(30))
 loop.close()

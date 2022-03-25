@@ -9,6 +9,7 @@ import time
 from aiohttp import web
 import json
 import time
+import logging
 
 Specification = autoclass("de.resol.vbus.Specification")
 spec = Specification.getDefaultSpecification()
@@ -62,8 +63,9 @@ class ConnectionCallback(PythonJavaClass):
 
 
 class BusDataServer:
+    logger=logging.getLogger("WServer")
     def __init__(self, connection, server_port):
-        print("JSON Server: Setup web app.")
+        self.logger.info("Setup web app.")
         app = web.Application()
         app.add_routes([web.get('/data', self.data_request)])
         app.add_routes([web.get('/cgi-bin/get_resol_device_information', self.device_info_request)])
@@ -71,12 +73,12 @@ class BusDataServer:
         self._runner = web.AppRunner(app)
         self._bus_data = []
 
-        print("JSON Server: Listening to VBus.")
+        self.logger.info("Listening to VBus.")
         self._callback = ConnectionCallback()
         connection.add_listener(self._callback)
 
     async def run(self):
-        print(f"JSON Server: Setup TCP web server on port {self._server_port}.")
+        self.logger.info(f"Setup TCP web server on port {self._server_port}.")
         await self._runner.setup()
         site = web.TCPSite(self._runner, port=self._server_port)
         await site.start()
@@ -100,6 +102,7 @@ class BusDataServer:
 
 
 class Connection:
+    logger = logging.getLogger("VBusCon")
     def __init__(self, host, password, port=80):
         # Create classes
         Addr = autoclass("java.net.InetAddress")
@@ -107,7 +110,7 @@ class Connection:
         #TcpDataSource = autoclass('de.resol.vbus.TcpDataSource')
         TcpDataSourceProvider = autoclass('de.resol.vbus.TcpDataSourceProvider')
         
-        print(f"VBus: Connecting to VBus device at {host}")
+        self.logger.info(f"Connecting to VBus device at {host}")
         dataSource = TcpDataSourceProvider.fetchInformation(Addr.getByName(host), port, 1500)
         dataSource.setLivePassword(password)
         # Bus address of a PC is 0x0020, using 0x0026 to avoid collisions
@@ -125,6 +128,8 @@ class Connection:
 
 
 class DeviceEmulator:
+    logger = logging.getLogger("DevSim ")
+
     def __init__(self, connection, sensors, device_number=1):
         self._cache = {}
         self._data_init_done = False
@@ -135,7 +140,7 @@ class DeviceEmulator:
         self._device = EmDeviceEmulator(connection.get(), device_number)
 
     async def run(self):
-        print("Resol: Connection manager started.")
+        self.logger.info("Connection manager started.")
         while self._data_init_done == False:
             await asyncio.sleep(0.25)
 
@@ -172,7 +177,7 @@ class DeviceEmulator:
         for entity_id, new_state in self._cache.items():
             index = self._sensors.index(entity_id) + 1
             if index > 6:
-                print(f"Resol: Only 5 sensors supported atm. Ignoring change of {entity_id}")
+                self.logger.warning(f"Only 5 sensors supported atm. Ignoring change of {entity_id}")
                 continue
 
             if new_state['state'] in ('on', 'off', 'unavailable', 'unknown'):
@@ -181,7 +186,10 @@ class DeviceEmulator:
                 else:
                     self._device.setResistorValueByNr(index, 4000)
                 
-                print(f"Resol: {entity_id} switched sensor {index} to \"{new_state['state']}\" on EM #{self._device.getSubAddress()}.")
+                self.logger.info(f"\
+                    {entity_id} switched sensor {index} to \
+                    \"{'on' if new_state['state'] == 'on' else 'off'}\" on \
+                    EM #{self._device.getSubAddress()}.")
             elif 'unit_of_measurement' in new_state['attributes']:
                 if new_state['attributes']['unit_of_measurement'] == "°C":
                     value = new_state['state']
@@ -190,8 +198,8 @@ class DeviceEmulator:
                     except:
                         value = 999.0
                     self._device.setResistorValueByNrAndPt1000Temperatur(index, value)
-                    print(f"Resol: {entity_id} set sensor {index} to {value}°C on EM #{self._device.getSubAddress()}.")
+                    self.logger.info(f"{entity_id} set sensor {index} to {value}°C on EM #{self._device.getSubAddress()}.")
             else:
                 self._device.setResistorValueByNr(index, new_state['state'])
-                print(f"Resol: {entity_id} set sensor {index} to {value} Ohms on EM #{self._device.getSubAddress()}.")
+                self.logger.info(f"{entity_id} set sensor {index} to {value} Ohms on EM #{self._device.getSubAddress()}.")
         self._cache = {}
