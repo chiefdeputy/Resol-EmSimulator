@@ -1,5 +1,9 @@
 # Resol-EmSimulator
-Home Assistant Addon project to simulate an EM device for Resol V-Bus. This is a proof of concept and probably not working very well.
+Home Assistant Addon project to simulate an EM device for Resol V-Bus.
+
+**This is a proof of concept and probably not working very well.**
+
+**Development for is stopped for now. Feel free to pick it up.**
 
 ## Installation
 This is WIP. So there's no convenient way to install it yet. Get the terminal addon and clone this repo to your ´´/addon´´ folder in home assistant. Add local addons in supervisor settings and build the container by installing it.
